@@ -1,0 +1,36 @@
+﻿{
+  "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
+  "settings": {
+    "documentationRules": {
+      "companyName": "Packt",
+      "copyrightText": "Copyright (c) Packt. All rights reserved.",
+      "documentExposedElements": false
+    },
+    "indentation": {
+      "useTabs": false,
+      "tabSize": 4,
+      "indentationSize": 4
+    },
+    "layoutRules": {
+
+    },
+    "namingRules": {
+      "allowCommonHungarianPrefixes": false
+
+    },
+    "maintainabilityRules": {
+
+    },
+    "orderingRules": {
+      "blankLinesBetweenUsingGroups": "allow",
+      "systemUsingDirectivesFirst": true,
+      "usingDirectivesPlacement": "outsideNamespace"
+    },
+    "readabilityRules": {
+      "allowBuiltInTypeAliases": false
+    },
+    "spacingRules": {
+
+    }
+  }
+}
