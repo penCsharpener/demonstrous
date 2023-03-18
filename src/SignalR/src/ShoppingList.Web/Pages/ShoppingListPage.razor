@@ -1,7 +1,8 @@
 ﻿@page "/shoppinglist"
+@using Microsoft.EntityFrameworkCore;
 @using ShoppingList.Web.Data;
 @using ShoppingList.Web.Models;
-@inject ApplicationDbContext context;
+@inject IServiceScopeFactory ScopeFactory
 
 <PageTitle>Shopping List</PageTitle>
 
@@ -10,23 +11,67 @@
 <EditForm Model="@NewItem" OnSubmit="@HandleSubmitAsync">
     <InputText id="name" @bind-Value="NewItem.Name" />
 
-    <button type="submit">Submit</button>
+    <button type="submit">Add</button>
 </EditForm>
 
-
+<ul>
+@foreach(var item in ShoppingItems)
+{
+  <li>
+    <span>@item.Name</span>
+    <span>
+        <button type="button" @onclick="@(() => HandleDeleteAsync(item.Id))">Delete</button>
+        </span>
+  </li>
+}
+</ul>
 
 @code {
   public ShoppingItem NewItem { get; set; } = new();
 
+  public List<ShoppingItem> ShoppingItems { get; set; } = new();
+
   protected override async Task OnInitializedAsync()
   {
-
+    using (var scope = ScopeFactory.CreateScope())
+    {
+      var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        ShoppingItems = await context.ShoppingItems.ToListAsync();
+    }
   }
 
   private async Task HandleSubmitAsync()
   {
     Console.WriteLine(NewItem.Name);
 
+    if (string.IsNullOrEmpty(NewItem.Name))
+    {
+      Console.WriteLine("Name cannot be empty for shopping item.");
+
+
+      return;
+    }
+
+    using (var scope = ScopeFactory.CreateScope())
+    {
+      var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+      context.ShoppingItems.Add(NewItem);
+
+      await context.SaveChangesAsync();
+    }
+  }
+
+  private async Task HandleDeleteAsync(int id)
+  {
+    using (var scope = ScopeFactory.CreateScope())
+    {
+      var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+      var item = await context.ShoppingItems.FirstOrDefaultAsync(s => s.Id == id);
+
+      context.ShoppingItems.Remove(item);
+
+      await context.SaveChangesAsync();
+    }
 
   }
 }
