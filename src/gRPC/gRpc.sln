@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DD2E65C3-9BF9-4DEC-8750-5CC959B5C4F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gRPC.Client", "src\gRPC.Client\gRPC.Client.csproj", "{03437412-D176-4D46-B64B-4462A556F84D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gRPC.Server", "src\gRPC.Server\gRPC.Server.csproj", "{6F38B522-6A2F-4007-9CDA-17FCACB55180}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "protos", "protos", "{62548844-3CB3-4C11-A71F-CD762B502CED}"
+	ProjectSection(SolutionItems) = preProject
+		protos\greet.proto = protos\greet.proto
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{03437412-D176-4D46-B64B-4462A556F84D} = {DD2E65C3-9BF9-4DEC-8750-5CC959B5C4F2}
+		{6F38B522-6A2F-4007-9CDA-17FCACB55180} = {DD2E65C3-9BF9-4DEC-8750-5CC959B5C4F2}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{03437412-D176-4D46-B64B-4462A556F84D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03437412-D176-4D46-B64B-4462A556F84D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03437412-D176-4D46-B64B-4462A556F84D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03437412-D176-4D46-B64B-4462A556F84D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F38B522-6A2F-4007-9CDA-17FCACB55180}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F38B522-6A2F-4007-9CDA-17FCACB55180}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F38B522-6A2F-4007-9CDA-17FCACB55180}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F38B522-6A2F-4007-9CDA-17FCACB55180}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
