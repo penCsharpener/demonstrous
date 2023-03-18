@@ -18,12 +18,12 @@
 @code {
   public ShoppingItem NewItem { get; set; } = new();
 
-  protected override Task OnInitializedAsync()
+  protected override async Task OnInitializedAsync()
   {
 
   }
 
-  private async HandleSubmitAsync()
+  private async Task HandleSubmitAsync()
   {
     Console.WriteLine(NewItem.Name);
 
