@@ -1,8 +1,11 @@
 ﻿@page "/shoppinglist"
 @using Microsoft.EntityFrameworkCore;
+@using Microsoft.AspNetCore.SignalR.Client;
 @using ShoppingList.Web.Data;
 @using ShoppingList.Web.Models;
-@inject IServiceScopeFactory ScopeFactory
+@inject IServiceScopeFactory ScopeFactory;
+@inject NavigationManager Navigation
+@implements IAsyncDisposable;
 
 <PageTitle>Shopping List</PageTitle>
 
@@ -14,7 +17,7 @@
     <button type="submit">Add</button>
 </EditForm>
 
-<ul>
+<ul class="mt-5">
 @foreach(var item in ShoppingItems)
 {
   <li>
@@ -27,6 +30,7 @@
 </ul>
 
 @code {
+  private HubConnection? hubConnection;
   public ShoppingItem NewItem { get; set; } = new();
 
   public List<ShoppingItem> ShoppingItems { get; set; } = new();
@@ -36,8 +40,30 @@
     using (var scope = ScopeFactory.CreateScope())
     {
       var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        ShoppingItems = await context.ShoppingItems.ToListAsync();
+      ShoppingItems = await context.ShoppingItems.ToListAsync();
     }
+
+    hubConnection = new HubConnectionBuilder()
+    .WithUrl(Navigation.ToAbsoluteUri("/shoppingaction"))
+    .WithAutomaticReconnect()
+    .Build();
+
+    hubConnection.On<ShoppingItemNotification>("ItemListUpdated", (item) =>
+    {
+      if (item.WasDeleted)
+      {
+        ShoppingItems.Remove(item);
+      }
+
+      if (item.WasAdded)
+      {
+        ShoppingItems.Add(item);
+      }
+
+      InvokeAsync(StateHasChanged);
+    });
+
+    await hubConnection.StartAsync();
   }
 
   private async Task HandleSubmitAsync()
@@ -48,7 +74,6 @@
     {
       Console.WriteLine("Name cannot be empty for shopping item.");
 
-
       return;
     }
 
@@ -58,6 +83,12 @@
       context.ShoppingItems.Add(NewItem);
 
       await context.SaveChangesAsync();
+
+      var notification = new ShoppingItemNotification(NewItem) { WasAdded = true };
+
+      await hubConnection.InvokeAsync<ShoppingItemNotification>("ItemListUpdated", notification);
+
+      ShoppingItems.Add(NewItem);
     }
   }
 
@@ -70,8 +101,17 @@
 
       context.ShoppingItems.Remove(item);
 
+      var notification = new ShoppingItemNotification(NewItem) { WasDeleted = true };
+
+      await hubConnection.InvokeAsync<ShoppingItemNotification>("ItemListUpdated", notification);
+
       await context.SaveChangesAsync();
     }
 
+  }
+
+  public async ValueTask DisposeAsync()
+  {
+    
   }
 }

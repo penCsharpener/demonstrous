@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ShoppingList.Web.Areas.Identity;
 using ShoppingList.Web.Data;
+using ShoppingList.Web.Hubs;
 
 namespace ShoppingList.Web;
 public class Program
@@ -21,6 +22,7 @@ public class Program
     builder.Services.AddServerSideBlazor();
     builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
     builder.Services.AddSingleton<WeatherForecastService>();
+    builder.Services.AddSignalR();
 
     var app = builder.Build();
 
@@ -47,6 +49,7 @@ public class Program
     app.MapControllers();
     app.MapBlazorHub();
     app.MapFallbackToPage("/_Host");
+    app.MapHub<ShoppingHub>("/shoppingaction");
 
     app.Run();
   }
