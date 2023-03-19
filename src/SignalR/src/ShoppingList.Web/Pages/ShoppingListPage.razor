@@ -43,16 +43,20 @@
       ShoppingItems = await context.ShoppingItems.ToListAsync();
     }
 
+    var url = Navigation.ToAbsoluteUri("/shoppingaction");
+    Console.WriteLine(url);
+
     hubConnection = new HubConnectionBuilder()
-    .WithUrl(Navigation.ToAbsoluteUri("/shoppingaction"))
+    .WithUrl(url)
     .WithAutomaticReconnect()
+    .ConfigureLogging(conf => conf.AddConsole())
     .Build();
 
     hubConnection.On<ShoppingItemNotification>("ItemListUpdated", (item) =>
     {
-      if (item.WasDeleted)
+      if (item.WasDeleted && ShoppingItems.FirstOrDefault(s => s.Id == item.Id) is { } existingItem)
       {
-        ShoppingItems.Remove(item);
+        ShoppingItems.Remove(existingItem);
       }
 
       if (item.WasAdded)
@@ -86,9 +90,14 @@
 
       var notification = new ShoppingItemNotification(NewItem) { WasAdded = true };
 
-      await hubConnection.InvokeAsync<ShoppingItemNotification>("ItemListUpdated", notification);
+      if (hubConnection is not null)
+      {
+        await hubConnection.SendAsync("NotifyNewItem", notification);
+      }
 
       ShoppingItems.Add(NewItem);
+
+      NewItem = new();
     }
   }
 
@@ -98,20 +107,26 @@
     {
       var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
       var item = await context.ShoppingItems.FirstOrDefaultAsync(s => s.Id == id);
+      var notification = new ShoppingItemNotification(item) { WasDeleted = true };
 
       context.ShoppingItems.Remove(item);
 
-      var notification = new ShoppingItemNotification(NewItem) { WasDeleted = true };
+      if (hubConnection is not null)
+      {
+        await hubConnection.SendAsync("NotifyNewItem", notification);
+      }
 
-      await hubConnection.InvokeAsync<ShoppingItemNotification>("ItemListUpdated", notification);
+      ShoppingItems.Remove(ShoppingItems.First(s => s.Id == id));
 
       await context.SaveChangesAsync();
     }
-
   }
 
   public async ValueTask DisposeAsync()
   {
-    
+    if (hubConnection is not null)
+    {
+      await hubConnection.DisposeAsync();
+    }
   }
 }

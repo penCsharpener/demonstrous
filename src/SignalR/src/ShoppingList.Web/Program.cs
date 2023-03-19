@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using ShoppingList.Web.Areas.Identity;
 using ShoppingList.Web.Data;
@@ -23,8 +24,16 @@ public class Program
     builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
     builder.Services.AddSingleton<WeatherForecastService>();
     builder.Services.AddSignalR();
+    builder.Services.AddCors(c => c.AddPolicy("AllowAll", options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+    builder.Services.AddResponseCompression(opts =>
+    {
+      opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+          new[] { "application/octet-stream" });
+    });
 
     var app = builder.Build();
+
+    app.UseResponseCompression();
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
@@ -42,6 +51,7 @@ public class Program
 
     app.UseStaticFiles();
 
+    app.UseCors("AllowAll");
     app.UseRouting();
 
     app.UseAuthorization();
