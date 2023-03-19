@@ -5,8 +5,8 @@ namespace ShoppingList.Web.Hubs;
 
 public class ShoppingHub : Hub
 {
-  public async Task NotifyNewItem(ShoppingItemNotification item)
-  {
-    await Clients.Others.SendAsync("ItemListUpdated", item);
-  }
+    public async Task NotifyNewItem(ShoppingItemNotification item)
+    {
+        await Clients.Others.SendAsync("ItemListUpdated", item);
+    }
 }

@@ -3,12 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using ShoppingList.Web.Models;
 
 namespace ShoppingList.Web.Data;
+
 public class ApplicationDbContext : IdentityDbContext
 {
-  public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-      : base(options)
-  {
-  }
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options) { }
 
-  public DbSet<ShoppingItem> ShoppingItems { get; set; }
+    public DbSet<ShoppingItem> ShoppingItems { get; set; }
 }

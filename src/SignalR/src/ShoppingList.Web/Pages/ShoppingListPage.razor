@@ -1,10 +1,10 @@
 ﻿@page "/shoppinglist"
-@using Microsoft.EntityFrameworkCore;
-@using Microsoft.AspNetCore.SignalR.Client;
-@using ShoppingList.Web.Data;
-@using ShoppingList.Web.Models;
 @inject IServiceScopeFactory ScopeFactory;
 @inject NavigationManager Navigation
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.SignalR.Client
+@using ShoppingList.Web.Models
+@using ShoppingList.Web.Data
 @implements IAsyncDisposable;
 
 <PageTitle>Shopping List</PageTitle>
@@ -12,21 +12,21 @@
 <h1>Shopping List</h1>
 
 <EditForm Model="@NewItem" OnSubmit="@HandleSubmitAsync">
-    <InputText id="name" @bind-Value="NewItem.Name" />
+  <InputText id="name" @bind-Value="NewItem.Name"/>
 
-    <button type="submit">Add</button>
+  <button type="submit">Add</button>
 </EditForm>
 
 <ul class="mt-5">
-@foreach(var item in ShoppingItems)
-{
-  <li>
-    <span>@item.Name</span>
-    <span>
+  @foreach (var item in ShoppingItems)
+  {
+    <li>
+      <span>@item.Name</span>
+      <span>
         <button type="button" @onclick="@(() => HandleDeleteAsync(item.Id))">Delete</button>
-        </span>
-  </li>
-}
+      </span>
+    </li>
+  }
 </ul>
 
 @code {
@@ -47,12 +47,12 @@
     Console.WriteLine(url);
 
     hubConnection = new HubConnectionBuilder()
-    .WithUrl(url)
-    .WithAutomaticReconnect()
-    .ConfigureLogging(conf => conf.AddConsole())
-    .Build();
+      .WithUrl(url)
+      .WithAutomaticReconnect()
+      .ConfigureLogging(conf => conf.AddConsole())
+      .Build();
 
-    hubConnection.On<ShoppingItemNotification>("ItemListUpdated", (item) =>
+    hubConnection.On<ShoppingItemNotification>("ItemListUpdated", item =>
     {
       if (item.WasDeleted && ShoppingItems.FirstOrDefault(s => s.Id == item.Id) is { } existingItem)
       {
@@ -129,4 +129,5 @@
       await hubConnection.DisposeAsync();
     }
   }
+
 }

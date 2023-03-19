@@ -5,8 +5,5 @@ namespace ShoppingList.Web.Models.Configuration;
 
 public class ShoppingItemConfiguration : IEntityTypeConfiguration<ShoppingItem>
 {
-  public void Configure(EntityTypeBuilder<ShoppingItem> builder)
-  {
-
-  }
+    public void Configure(EntityTypeBuilder<ShoppingItem> builder) { }
 }
