@@ -1,3 +1,4 @@
+using Restful.Api.Infrastructure.Extensions;
 using Serilog;
 
 namespace Restful.Api;
@@ -13,6 +14,7 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.RegisterInfrastructureServices();
 
         var app = builder.Build();
 
