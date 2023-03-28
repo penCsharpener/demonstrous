@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Restful.Api.Context\Restful.Api.Context.csproj" />
+  </ItemGroup>
+
 </Project>
