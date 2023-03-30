@@ -24,15 +24,15 @@ public sealed class FakeDataProvider : IFakeDataProvider
             .RuleFor(b => b.PageCount, f => f.Random.Int(70, 570))
             .RuleFor(b => b.AuthorId, f => f.Random.Int(1, 25))
             .RuleFor(b => b.PublisherId, f => f.Random.Int(1, 25))
-            .RuleFor(b => b.Id, f => f.IndexFaker);
+            .RuleFor(b => b.Id, f => f.IndexFaker + 1);
 
         _authorFaker.RuleFor(a => a.FirstName, f => f.Name.FirstName())
             .RuleFor(a => a.LastName, f => f.Name.LastName())
             .RuleFor(a => a.DateOfBirth, f => DateTimeOffset.Now.AddDays(-f.Random.Int(10000, 50000)))
-            .RuleFor(b => b.Id, f => f.IndexFaker);
+            .RuleFor(b => b.Id, f => f.IndexFaker + 1);
 
         _publisherFaker.RuleFor(p => p.Name, f => f.Company.CompanyName())
-            .RuleFor(b => b.Id, f => f.IndexFaker);
+            .RuleFor(b => b.Id, f => f.IndexFaker + 1);
 
         _books.AddRange(_bookFaker.GenerateForever().Take(50));
         _authors.AddRange(_authorFaker.GenerateForever().Take(50));
@@ -43,9 +43,6 @@ public sealed class FakeDataProvider : IFakeDataProvider
     {
         foreach (var book in _books)
         {
-            book.Author = _authors.FirstOrDefault(a => a.Id == book.AuthorId);
-            book.Publisher = _publishers.FirstOrDefault(p => p.Id == book.PublisherId);
-
             yield return book;
         }
     }
@@ -54,8 +51,6 @@ public sealed class FakeDataProvider : IFakeDataProvider
     {
         foreach (var author in _authors)
         {
-            author.Books = _books.Where(b => b.AuthorId == author.Id).ToList();
-
             yield return author;
         }
     }
@@ -64,8 +59,6 @@ public sealed class FakeDataProvider : IFakeDataProvider
     {
         foreach (var publisher in _publishers)
         {
-            publisher.Books = _books.Where(b => b.PublisherId == publisher.Id).ToList();
-
             yield return publisher;
         }
     }

@@ -10,4 +10,9 @@
     <ProjectReference Include="..\Restful.Api.Entities\Restful.Api.Entities.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" />
+  </ItemGroup>
+
 </Project>

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Restful.Api.Application.Abstractions;
+using Restful.Api.Context;
 
 namespace Restful.Api.Controllers;
 
@@ -7,23 +9,23 @@ namespace Restful.Api.Controllers;
 [Route("api/[controller]")]
 public class BooksController : ControllerBase
 {
-    private readonly IFakeDataProvider _fakeDataProvider;
+    private readonly LibraryContext _context;
 
-    public BooksController(IFakeDataProvider fakeDataProvider)
+    public BooksController(LibraryContext context)
     {
-        _fakeDataProvider = fakeDataProvider;
+        _context = context;
     }
 
     [HttpGet]
     public IActionResult GetBooks()
     {
-        return Ok(_fakeDataProvider.GetBooks().Take(10));
+        return Ok(_context.Books.Include(b => b.Author).Include(b => b.Publisher).Take(10).ToList());
     }
 
     [HttpGet("{id:int}")]
     public IActionResult GetBooks(int id)
     {
-        var book = _fakeDataProvider.GetBooks().Where(b => b.Id == id).Take(1).FirstOrDefault();
+        var book = _context.Books.Where(b => b.Id == id).Take(1).FirstOrDefault();
 
         if (book is null)
         {

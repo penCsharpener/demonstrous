@@ -11,6 +11,10 @@
     <ProjectReference Include="..\Restful.Api.FakeData\Restful.Api.FakeData.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
+  </ItemGroup>
+
 
 
 </Project>
