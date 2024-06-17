@@ -11,9 +11,9 @@ internal class Program
     private static void Main(string[] args)
     {
 #if DEBUG
-        var summary = BenchmarkRunner.Run<StringServiceNameTransformBenchmarker>(new DebugBuildConfig());
+        var summary = BenchmarkRunner.Run<ClassStructRecordBenchmarker>(new DebugBuildConfig());
 #else
-        var summary = BenchmarkRunner.Run<StringServiceNameTransformBenchmarker>();
+        var summary = BenchmarkRunner.Run<ClassStructRecordBenchmarker>();
 #endif
     }
 }
