@@ -27,3 +27,4 @@ public class StringServiceNameTransformBenchmarkTests
         return summary.Reports.FirstOrDefault(x => string.Compare(x.BenchmarkCase.Descriptor.DisplayInfo, key, true) == 0)?.ResultStatistics!;
     }
 }
+
