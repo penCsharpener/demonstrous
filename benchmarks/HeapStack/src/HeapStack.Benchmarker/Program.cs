@@ -11,9 +11,9 @@ internal class Program
     private static void Main(string[] args)
     {
 #if DEBUG
-        var summary = BenchmarkRunner.Run<NumberTypeBenchmarker>(new DebugBuildConfig());
+        var summary = BenchmarkRunner.Run<CollectionAllocationBenchmarker>(new DebugBuildConfig());
 #else
-        var summary = BenchmarkRunner.Run<NumberTypeBenchmarker>();
+        var summary = BenchmarkRunner.Run<CollectionAllocationBenchmarker>();
 #endif
     }
 }
