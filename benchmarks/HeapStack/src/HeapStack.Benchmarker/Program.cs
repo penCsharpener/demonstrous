@@ -1,4 +1,7 @@
-﻿using BenchmarkDotNet.Running;
+﻿#if DEBUG
+using BenchmarkDotNet.Configs;
+#endif
+using BenchmarkDotNet.Running;
 using HeapStack.Benchmarker.Services;
 
 namespace HeapStack.Benchmarker;
@@ -8,9 +11,9 @@ internal class Program
     private static void Main(string[] args)
     {
 #if DEBUG
-        var summary = BenchmarkRunner.Run<StringServiceBenchmarker>(new DebugBuildConfig());
+        var summary = BenchmarkRunner.Run<StringServiceNameTransformBenchmarker>(new DebugBuildConfig());
 #else
-        var summary = BenchmarkRunner.Run<StringServiceBenchmarker>();
+        var summary = BenchmarkRunner.Run<StringServiceNameTransformBenchmarker>();
 #endif
     }
 }

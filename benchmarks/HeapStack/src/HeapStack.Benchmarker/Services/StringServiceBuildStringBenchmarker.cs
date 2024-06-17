@@ -4,7 +4,7 @@ using HeapStack.WorkerService.Services;
 namespace HeapStack.Benchmarker.Services;
 
 [MemoryDiagnoser]
-public class StringServiceBenchmarker
+public class StringServiceBuildStringBenchmarker
 {
     private readonly StringService _sut = new();
 
