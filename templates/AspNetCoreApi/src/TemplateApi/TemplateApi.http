@@ -1,0 +1,20 @@
+@TemplateApi_HostAddress = https://localhost:7144
+
+GET {{TemplateApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+GET {{TemplateApi_HostAddress}}/weatherforecast/1
+Accept: application/json
+
+###
+
+POST {{TemplateApi_HostAddress}}/weatherforecast/
+Content-Type: application/json
+Accept: application/json
+
+{
+    "summary": "kalt"
+}
+
+###
